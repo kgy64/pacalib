@@ -106,17 +106,17 @@ namespace PaCaLib
 
         inline void SetLineWidth(double width)
         {
-            cairo_set_line_width(myCairo, width);
+            cairo_set_line_width(myCairo, width * myWidth);
         }
 
         inline void Move(double x, double y)
         {
-            cairo_move_to(myCairo, x, y);
+            cairo_move_to(myCairo, x * myWidth, y * myHeight);
         }
 
         inline void Line(double x, double y)
         {
-            cairo_line_to(myCairo, x, y);
+            cairo_line_to(myCairo, x * myWidth, y * myHeight);
         }
 
         inline void SetColour(double r, double g, double b)
@@ -131,8 +131,10 @@ namespace PaCaLib
 
         inline void DrawRectangle(double x, double y, double w, double h)
         {
-            cairo_rectangle(myCairo, x, y, w, h);
+            cairo_rectangle(myCairo, x * myWidth, y * myHeight, w * myWidth, h * myHeight);
         }
+
+        void DrawText(double x, double y, const char * text, double size, double aspect = 1.0);
 
         inline void Paint(void)
         {
@@ -145,9 +147,15 @@ namespace PaCaLib
         }
 
      protected:
+        double myWidth;
+
+        double myHeight;
+
         PacaSurface mySurface;
 
         cairo_t * myCairo;
+
+        PangoFontDescription *myFontDescription;
 
      private:
         SYS_DEFINE_CLASS_NAME("PaCaLib::PacaTarget");

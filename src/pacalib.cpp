@@ -15,16 +15,24 @@ SYS_DEFINE_MODULE(DM_PACALIB);
 using namespace PaCaLib;
 
 PacaTarget::PacaTarget(int width, int height):
+    myWidth(width),
+    myHeight(height),
     mySurface(width, height),
     myCairo(cairo_create(mySurface.get()))
 {
  SYS_DEBUG_MEMBER(DM_PACALIB);
+
+ myFontDescription = pango_font_description_new();
+ pango_font_description_set_family(myFontDescription, "serif");
+ pango_font_description_set_weight(myFontDescription, PANGO_WEIGHT_BOLD);
+ pango_font_description_set_absolute_size(myFontDescription, myHeight * PANGO_SCALE);
 }
 
 PacaTarget::~PacaTarget()
 {
  SYS_DEBUG_MEMBER(DM_PACALIB);
 
+ pango_font_description_free(myFontDescription);
  cairo_destroy(myCairo);
 }
 
@@ -41,6 +49,29 @@ int PacaTarget::GetHeight(void) const
 const void * PacaTarget::GetPixelData(void) const
 {
  return mySurface.getData();
+}
+
+void PacaTarget::DrawText(double x, double y, const char * text, double size, double aspect)
+{
+ SYS_DEBUG_MEMBER(DM_PACALIB);
+
+ double h = size * aspect;
+ double v = size / aspect;
+
+ cairo_scale(myCairo, h, -v);
+
+ PangoLayout *layout = pango_cairo_create_layout(myCairo);
+
+ pango_layout_set_text(layout, text, -1);
+ pango_layout_set_font_description(layout, myFontDescription);
+ cairo_new_path(myCairo);
+ Move(x/h, -y/v);
+ pango_cairo_update_layout(myCairo, layout);
+ pango_cairo_layout_path(myCairo, layout);
+ cairo_fill(myCairo);
+ cairo_stroke(myCairo);
+
+ g_object_unref(layout);
 }
 
 /* * * * * * * * * * * * * End - of - File * * * * * * * * * * * * * * */
