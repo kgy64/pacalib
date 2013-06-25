@@ -14,11 +14,12 @@ SYS_DEFINE_MODULE(DM_PACALIB);
 
 using namespace PaCaLib;
 
-PacaTarget::PacaTarget(int width, int height):
+PacaTarget::PacaTarget(int width, int height, float aspect):
     myWidth(width),
     myHeight(height),
     mySurface(width, height),
-    myCairo(cairo_create(mySurface.get()))
+    myCairo(cairo_create(mySurface.get())),
+    myScreenAspect(aspect)
 {
  SYS_DEBUG_MEMBER(DM_PACALIB);
 
@@ -55,10 +56,15 @@ void PacaTarget::DrawText(double x, double y, const char * text, double size, do
 {
  SYS_DEBUG_MEMBER(DM_PACALIB);
 
- double h = size * aspect;
- double v = size / aspect;
+ cairo_save(myCairo);
 
- cairo_scale(myCairo, h, -v);
+ double h = size * aspect;
+ double v = size;
+
+ h *= 0.6;
+ v *= 0.8; // Heuristic values :-)
+
+ cairo_scale(myCairo, h/myScreenAspect, -v);
 
  PangoLayout *layout = pango_cairo_create_layout(myCairo);
 
@@ -72,6 +78,8 @@ void PacaTarget::DrawText(double x, double y, const char * text, double size, do
  cairo_stroke(myCairo);
 
  g_object_unref(layout);
+
+ cairo_restore(myCairo);
 }
 
 /* * * * * * * * * * * * * End - of - File * * * * * * * * * * * * * * */
