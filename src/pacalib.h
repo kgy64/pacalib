@@ -82,7 +82,7 @@ namespace PaCaLib
     class PacaTarget: public Glesly::Target2D
     {
      public:
-        PacaTarget(int width, int height, float aspect);
+        PacaTarget(int width, int height, float aspect = 1.0f);
         virtual ~PacaTarget();
 
         virtual int GetWidth(void) const;
