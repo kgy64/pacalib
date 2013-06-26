@@ -52,7 +52,7 @@ const void * PacaTarget::GetPixelData(void) const
  return mySurface.getData();
 }
 
-void PacaTarget::DrawText(double x, double y, const char * text, double size, double aspect)
+void PacaTarget::DrawText(double x, double y, TextMode mode, const char * text, double size, double aspect)
 {
  SYS_DEBUG_MEMBER(DM_PACALIB);
 
@@ -62,17 +62,33 @@ void PacaTarget::DrawText(double x, double y, const char * text, double size, do
  double v = size;
 
  h *= 0.6;
- v *= 0.8; // Heuristic values :-)
+ v *= 0.85; // Heuristic values :-)
 
- cairo_scale(myCairo, h/myScreenAspect, -v);
+ cairo_translate(myCairo, 0, myHeight/2);
+ cairo_scale(myCairo, h, -v);
 
  PangoLayout *layout = pango_cairo_create_layout(myCairo);
 
  pango_layout_set_text(layout, text, -1);
  pango_layout_set_font_description(layout, myFontDescription);
  cairo_new_path(myCairo);
- Move(x/h, -y/v);
  pango_cairo_update_layout(myCairo, layout);
+ int width, height;
+ pango_layout_get_size(layout, &width, &height);
+ double y_pos = (y-0.5)*(myHeight/2)/v - height/(2*PANGO_SCALE);
+ double x_pos = x*myWidth/h;
+ switch (mode) {
+    case LEFT:
+        // Nothing to do
+    break;
+    case CENTER:
+        x_pos -= width/(2*PANGO_SCALE);
+    break;
+    case RIGHT:
+        x_pos -= width/PANGO_SCALE;
+    break;
+ }
+ cairo_move_to(myCairo, x_pos, y_pos);
  pango_cairo_layout_path(myCairo, layout);
  cairo_fill(myCairo);
  cairo_stroke(myCairo);

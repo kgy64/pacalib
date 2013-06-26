@@ -134,7 +134,13 @@ namespace PaCaLib
             cairo_rectangle(myCairo, x * myWidth, y * myHeight, w * myWidth, h * myHeight);
         }
 
-        void DrawText(double x, double y, const char * text, double size, double aspect = 1.0);
+        enum TextMode {
+            LEFT    = 0,
+            CENTER,
+            RIGHT
+        };
+
+        void DrawText(double x, double y, TextMode mode, const char * text, double size, double aspect = 1.0);
 
         inline void Paint(void)
         {
