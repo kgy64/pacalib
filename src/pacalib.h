@@ -152,6 +152,11 @@ namespace PaCaLib
             cairo_paint_with_alpha(myCairo, alpha);
         }
 
+        inline void Operator(cairo_operator_t op = CAIRO_OPERATOR_OVER)
+        {
+            cairo_set_operator(myCairo, op);
+        }
+
      protected:
         double myWidth;
 
