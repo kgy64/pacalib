@@ -94,6 +94,11 @@ namespace PaCaLib
             return mySurface.getWidth();
         }
 
+        inline void Scale(double w, double h)
+        {
+            cairo_scale(myCairo, w, h);
+        }
+
         inline void Stroke(void)
         {
             cairo_stroke(myCairo);
@@ -104,19 +109,24 @@ namespace PaCaLib
             cairo_fill(myCairo);
         }
 
+        inline void FillPreserve(void)
+        {
+            cairo_fill_preserve(myCairo);
+        }
+
         inline void SetLineWidth(double width)
         {
-            cairo_set_line_width(myCairo, width * myWidth);
+            cairo_set_line_width(myCairo, width);
         }
 
         inline void Move(double x, double y)
         {
-            cairo_move_to(myCairo, x * myWidth, y * myHeight);
+            cairo_move_to(myCairo, x, y);
         }
 
         inline void Line(double x, double y)
         {
-            cairo_line_to(myCairo, x * myWidth, y * myHeight);
+            cairo_line_to(myCairo, x, y);
         }
 
         inline void SetColour(double r, double g, double b)
@@ -129,9 +139,29 @@ namespace PaCaLib
             cairo_set_source_rgba(myCairo, r, g, b, a);
         }
 
-        inline void DrawRectangle(double x, double y, double w, double h)
+        inline void Rectangle(double x, double y, double w, double h)
         {
-            cairo_rectangle(myCairo, x * myWidth, y * myHeight, w * myWidth, h * myHeight);
+            cairo_rectangle(myCairo, x, y, w, h);
+        }
+
+        inline void Arc(double xc, double yc, double r, double a1, double a2)
+        {
+            cairo_arc(myCairo, xc, yc, r, a1, a2);
+        }
+
+        inline void NewPath(void)
+        {
+            cairo_new_path(myCairo);
+        }
+
+        inline void NewSubPath(void)
+        {
+            cairo_new_sub_path(myCairo);
+        }
+
+        inline void ClosePath(void)
+        {
+            cairo_close_path(myCairo);
         }
 
         enum TextMode {
