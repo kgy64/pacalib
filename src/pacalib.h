@@ -20,6 +20,23 @@ SYS_DECLARE_MODULE(DM_PACALIB);
 
 namespace PaCaLib
 {
+    struct Colour
+    {
+        inline Colour(double rr, double gg, double bb, double aa):
+            r(rr),
+            g(gg),
+            b(bb),
+            a(aa)
+        {
+        }
+
+        double r;
+        double g;
+        double b;
+        double a;
+
+    }; // struct Colour
+
     /// A wrapper for cairo_surface_t
     class PacaSurface
     {
@@ -144,6 +161,11 @@ namespace PaCaLib
             cairo_set_source_rgba(myCairo, r, g, b, a);
         }
 
+        inline void SetColour(const Colour & col)
+        {
+            cairo_set_source_rgba(myCairo, col.r, col.g, col.b, col.a);
+        }
+
         inline void Rectangle(double x, double y, double w, double h)
         {
             cairo_rectangle(myCairo, x, y, w, h);
@@ -175,7 +197,17 @@ namespace PaCaLib
             RIGHT
         };
 
-        void DrawText(double x, double y, TextMode mode, const char * text, double size, double aspect = 1.0);
+        double DrawText(double x, double y, TextMode mode, const char * text, double size, double aspect = 1.0);
+
+        inline void SetTextOutlineColour(double r, double g, double b, double a = 1.0)
+        {
+            myTextOutlineColour = Colour(r, g, b, a);
+        }
+
+        inline void SetTextOutline(double outline)
+        {
+            myTextOutline = outline;
+        }
 
         inline void Paint(void)
         {
@@ -207,6 +239,10 @@ namespace PaCaLib
         SYS_DEFINE_CLASS_NAME("PaCaLib::PacaTarget");
 
         float myScreenAspect;
+
+        double myTextOutline;
+
+        Colour myTextOutlineColour;
 
     }; // class PacaTarget
 

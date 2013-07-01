@@ -19,7 +19,9 @@ PacaTarget::PacaTarget(int width, int height, float aspect):
     myHeight(height),
     mySurface(width, height),
     myCairo(cairo_create(mySurface.get())),
-    myScreenAspect(aspect)
+    myScreenAspect(aspect),
+    myTextOutline(0.0),
+    myTextOutlineColour(0.0, 0.0, 0.0, 1.0)
 {
  SYS_DEBUG_MEMBER(DM_PACALIB);
 
@@ -57,7 +59,7 @@ const void * PacaTarget::GetPixelData(void) const
  return mySurface.getData();
 }
 
-void PacaTarget::DrawText(double x, double y, TextMode mode, const char * text, double size, double aspect)
+double PacaTarget::DrawText(double x, double y, TextMode mode, const char * text, double size, double aspect)
 {
  SYS_DEBUG_MEMBER(DM_PACALIB);
 
@@ -101,12 +103,23 @@ void PacaTarget::DrawText(double x, double y, TextMode mode, const char * text, 
  Move(x_pos, y_pos);
  pango_cairo_layout_path(myCairo, layout);
 
- Fill();
- Stroke();
+ if (myTextOutline > 0.0) {
+    SetLineWidth(text_height_half * myTextOutline);
+    Stroke();
+ } else if (myTextOutline < 0.0) {
+    FillPreserve();
+    SetLineWidth(-text_height_half * myTextOutline);
+    SetColour(myTextOutlineColour);
+    Stroke();
+ } else {
+    Fill();
+ }
 
  g_object_unref(layout);
 
  cairo_restore(myCairo);
+
+ return (2.0 * h) * text_width_half;
 }
 
 /* * * * * * * * * * * * * End - of - File * * * * * * * * * * * * * * */
