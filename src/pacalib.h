@@ -129,6 +129,11 @@ namespace PaCaLib
             cairo_line_to(myCairo, x, y);
         }
 
+        inline void SetLineCap(cairo_line_cap_t mode)
+        {
+            cairo_set_line_cap(myCairo, mode);
+        }
+
         inline void SetColour(double r, double g, double b)
         {
             cairo_set_source_rgb(myCairo, r, g, b);
