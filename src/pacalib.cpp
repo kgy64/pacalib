@@ -14,12 +14,11 @@ SYS_DEFINE_MODULE(DM_PACALIB);
 
 using namespace PaCaLib;
 
-PacaTarget::PacaTarget(int width, int height, float aspect):
+PacaTarget::PacaTarget(int width, int height):
     myWidth(width),
     myHeight(height),
     mySurface(width, height),
     myCairo(cairo_create(mySurface.get())),
-    myScreenAspect(aspect),
     myTextOutline(0.0),
     myTextOutlineColour(0.0, 0.0, 0.0, 1.0)
 {

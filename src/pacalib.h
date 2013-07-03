@@ -99,7 +99,7 @@ namespace PaCaLib
     class PacaTarget: public Glesly::Target2D
     {
      public:
-        PacaTarget(int width, int height, float aspect = 1.0f);
+        PacaTarget(int width, int height);
         virtual ~PacaTarget();
 
         virtual int GetWidth(void) const;
@@ -237,8 +237,6 @@ namespace PaCaLib
 
      private:
         SYS_DEFINE_CLASS_NAME("PaCaLib::PacaTarget");
-
-        float myScreenAspect;
 
         double myTextOutline;
 
