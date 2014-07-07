@@ -45,6 +45,8 @@ namespace PaCaLib
         {
             SYS_DEBUG_MEMBER(DM_PACALIB);
             mySurface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, width, height);
+            ASSERT(cairo_surface_status(mySurface) == CAIRO_STATUS_SUCCESS, "Cairo: creating surface failed with " << GetErrorMessage(cairo_surface_status(mySurface)));
+            SYS_DEBUG(DL_INFO1, "Surface at " << mySurface);
         };
 
         inline virtual ~PacaSurface()
@@ -93,6 +95,8 @@ namespace PaCaLib
 
         cairo_surface_t * mySurface;
 
+        static const char * GetErrorMessage(cairo_status_t status);
+
     }; // class PacaSurface;
 
     /// A wrapper for cairo_t
@@ -102,9 +106,9 @@ namespace PaCaLib
         PacaTarget(int width, int height);
         virtual ~PacaTarget();
 
-        virtual int GetWidth(void) const;
-        virtual int GetHeight(void) const;
-        virtual const void * GetPixelData(void) const;
+        virtual int GetWidth(void) const override;
+        virtual int GetHeight(void) const override;
+        virtual const void * GetPixelData(void) const override;
 
         inline int GetLogicalWidth(void) const
         {
@@ -233,7 +237,7 @@ namespace PaCaLib
 
         cairo_t * myCairo;
 
-        PangoFontDescription *myFontDescription;
+        PangoFontDescription * myFontDescription;
 
      private:
         SYS_DEFINE_CLASS_NAME("PaCaLib::PacaTarget");
