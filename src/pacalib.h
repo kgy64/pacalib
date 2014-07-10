@@ -20,12 +20,21 @@
 #define __SRC_PACALIB_H_INCLUDED__
 
 #include <Debug/Debug.h>
-#include <Memory/Auton.h>
+
+#include <boost/shared_ptr.hpp>
 
 SYS_DECLARE_MODULE(DM_PACALIB);
 
 namespace PaCaLib
 {
+    class Surface;
+    typedef boost::shared_ptr<Surface> SurfacePtr;
+
+    class Target;
+    typedef boost::shared_ptr<Target> TargetPtr;
+
+    void Initialize(void);
+
     struct Colour
     {
         Colour(double r, double g, double b, double a):
@@ -52,17 +61,24 @@ namespace PaCaLib
     class Surface
     {
      public:
+        static SurfacePtr Get(int width, int height);
+
         virtual void * getData(void) =0;
         virtual const void * getData(void) const =0;
         virtual int getWidth(void) const =0;
         virtual int getPhysicalWidth(void) const =0;
         virtual int getHeight(void) const =0;
 
+     private:
+        SYS_DEFINE_CLASS_NAME("PaCaLib::Surface");
+
     }; // class Surface;
 
     class Target
     {
      public:
+        static TargetPtr Get(int width, int height);
+
         virtual int GetWidth(void) const =0;
         virtual int GetHeight(void) const =0;
         virtual const void * GetPixelData(void) const =0;
@@ -88,6 +104,9 @@ namespace PaCaLib
         virtual void SetTextOutline(double outline) =0;
         virtual void Paint(void) =0;
         virtual void Paint(double alpha) =0;
+
+     private:
+        SYS_DEFINE_CLASS_NAME("PaCaLib::Target");
 
     }; // class Target
 
