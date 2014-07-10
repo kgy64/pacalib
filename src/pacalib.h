@@ -1,20 +1,18 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  *
  * Project:     PaCaLib
- * Purpose:     Pnago Cairo C++ library on my OpenGL library, Glesly
+ * Purpose:     Interface for my rendering library
  * Author:      György Kövesdi (kgy@teledigit.eu)
  * Licence:     GPL (see file 'COPYING' in the project root for more details)
- * Comments:    
+ * Comments:    Can be implemented for different backends
  *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 #ifndef __SRC_PACALIB_H_INCLUDED__
 #define __SRC_PACALIB_H_INCLUDED__
 
-#include <pango/pangocairo.h>
-
-#include <glesly/target2d.h>
 #include <Debug/Debug.h>
+#include <Memory/Auton.h>
 
 SYS_DECLARE_MODULE(DM_PACALIB);
 
@@ -22,11 +20,11 @@ namespace PaCaLib
 {
     struct Colour
     {
-        inline Colour(double rr, double gg, double bb, double aa):
-            r(rr),
-            g(gg),
-            b(bb),
-            a(aa)
+        Colour(double r, double g, double b, double a):
+            r(r),
+            g(g),
+            b(b),
+            a(a)
         {
         }
 
@@ -37,218 +35,58 @@ namespace PaCaLib
 
     }; // struct Colour
 
-    /// A wrapper for cairo_surface_t
-    class PacaSurface
+    enum TextMode {
+        LEFT    = 0,
+        CENTER,
+        RIGHT
+    };
+
+    class Surface
     {
      public:
-        inline PacaSurface(int width, int height)
-        {
-            SYS_DEBUG_MEMBER(DM_PACALIB);
-            mySurface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, width, height);
-            ASSERT(cairo_surface_status(mySurface) == CAIRO_STATUS_SUCCESS, "Cairo: creating surface failed with " << GetErrorMessage(cairo_surface_status(mySurface)));
-            SYS_DEBUG(DL_INFO1, "Surface at " << mySurface);
-        };
+        virtual void * getData(void) =0;
+        virtual const void * getData(void) const =0;
+        virtual int getWidth(void) const =0;
+        virtual int getPhysicalWidth(void) const =0;
+        virtual int getHeight(void) const =0;
 
-        inline virtual ~PacaSurface()
-        {
-            SYS_DEBUG_MEMBER(DM_PACALIB);
-            cairo_surface_destroy(mySurface);
-        }
+    }; // class Surface;
 
-        inline cairo_surface_t * get(void)
-        {
-            return mySurface;
-        }
-
-        inline const cairo_surface_t * get(void) const
-        {
-            return mySurface;
-        }
-
-        inline unsigned char * getData(void)
-        {
-            return cairo_image_surface_get_data(get());
-        }
-
-        inline const unsigned char * getData(void) const
-        {
-            return cairo_image_surface_get_data(const_cast<cairo_surface_t*>(get()));
-        }
-
-        inline int getWidth(void) const
-        {
-            return cairo_image_surface_get_width(const_cast<cairo_surface_t*>(get()));
-        }
-
-        inline int getPhysicalWidth(void) const
-        {
-            return cairo_image_surface_get_stride(const_cast<cairo_surface_t*>(get())) / 4; // Note: always using 32-bit pixels
-        }
-
-        inline int getHeight(void) const
-        {
-            return cairo_image_surface_get_height(const_cast<cairo_surface_t*>(get()));
-        }
-
-     private:
-        SYS_DEFINE_CLASS_NAME("PaCaLib::PacaSurface");
-
-        cairo_surface_t * mySurface;
-
-        static const char * GetErrorMessage(cairo_status_t status);
-
-    }; // class PacaSurface;
-
-    /// A wrapper for cairo_t
-    class PacaTarget: public Glesly::Target2D
+    class Target
     {
      public:
-        PacaTarget(int width, int height);
-        virtual ~PacaTarget();
+        virtual int GetWidth(void) const =0;
+        virtual int GetHeight(void) const =0;
+        virtual const void * GetPixelData(void) const =0;
+        virtual int GetLogicalWidth(void) const =0;
+        virtual void Scale(double w, double h) =0;
+        virtual void Stroke(void) =0;
+        virtual void Fill(void) =0;
+        virtual void FillPreserve(void) =0;
+        virtual void SetLineWidth(double width) =0;
+        virtual void Move(double x, double y) =0;
+        virtual void Line(double x, double y) =0;
+        virtual void SetLineCap(cairo_line_cap_t mode) =0;
+        virtual void SetColour(double r, double g, double b) =0;
+        virtual void SetColour(double r, double g, double b, double a) =0;
+        virtual void SetColour(const Colour & col) =0;
+        virtual void Rectangle(double x, double y, double w, double h) =0;
+        virtual void Arc(double xc, double yc, double r, double a1, double a2) =0;
+        virtual void NewPath(void) =0;
+        virtual void NewSubPath(void) =0;
+        virtual void ClosePath(void) =0;
+        virtual double DrawText(double x, double y, TextMode mode, const char * text, double size, double aspect = 1.0) =0;
+        virtual void SetTextOutlineColour(double r, double g, double b, double a = 1.0) =0;
+        virtual void SetTextOutline(double outline) =0;
+        virtual void Paint(void) =0;
+        virtual void Paint(double alpha) =0;
 
-        virtual int GetWidth(void) const override;
-        virtual int GetHeight(void) const override;
-        virtual const void * GetPixelData(void) const override;
-
-        inline int GetLogicalWidth(void) const
-        {
-            return mySurface.getWidth();
-        }
-
-        inline void Scale(double w, double h)
-        {
-            cairo_scale(myCairo, w, h);
-        }
-
-        inline void Stroke(void)
-        {
-            cairo_stroke(myCairo);
-        }
-
-        inline void Fill(void)
-        {
-            cairo_fill(myCairo);
-        }
-
-        inline void FillPreserve(void)
-        {
-            cairo_fill_preserve(myCairo);
-        }
-
-        inline void SetLineWidth(double width)
-        {
-            cairo_set_line_width(myCairo, width);
-        }
-
-        inline void Move(double x, double y)
-        {
-            cairo_move_to(myCairo, x, y);
-        }
-
-        inline void Line(double x, double y)
-        {
-            cairo_line_to(myCairo, x, y);
-        }
-
-        inline void SetLineCap(cairo_line_cap_t mode)
-        {
-            cairo_set_line_cap(myCairo, mode);
-        }
-
-        inline void SetColour(double r, double g, double b)
-        {
-            cairo_set_source_rgb(myCairo, r, g, b);
-        }
-
-        inline void SetColour(double r, double g, double b, double a)
-        {
-            cairo_set_source_rgba(myCairo, r, g, b, a);
-        }
-
-        inline void SetColour(const Colour & col)
-        {
-            cairo_set_source_rgba(myCairo, col.r, col.g, col.b, col.a);
-        }
-
-        inline void Rectangle(double x, double y, double w, double h)
-        {
-            cairo_rectangle(myCairo, x, y, w, h);
-        }
-
-        inline void Arc(double xc, double yc, double r, double a1, double a2)
-        {
-            cairo_arc(myCairo, xc, yc, r, a1, a2);
-        }
-
-        inline void NewPath(void)
-        {
-            cairo_new_path(myCairo);
-        }
-
-        inline void NewSubPath(void)
-        {
-            cairo_new_sub_path(myCairo);
-        }
-
-        inline void ClosePath(void)
-        {
-            cairo_close_path(myCairo);
-        }
-
-        enum TextMode {
-            LEFT    = 0,
-            CENTER,
-            RIGHT
-        };
-
-        double DrawText(double x, double y, TextMode mode, const char * text, double size, double aspect = 1.0);
-
-        inline void SetTextOutlineColour(double r, double g, double b, double a = 1.0)
-        {
-            myTextOutlineColour = Colour(r, g, b, a);
-        }
-
-        inline void SetTextOutline(double outline)
-        {
-            myTextOutline = outline;
-        }
-
-        inline void Paint(void)
-        {
-            cairo_paint(myCairo);
-        }
-
-        inline void Paint(double alpha)
-        {
-            cairo_paint_with_alpha(myCairo, alpha);
-        }
-
-        inline void Operator(cairo_operator_t op = CAIRO_OPERATOR_OVER)
-        {
-            cairo_set_operator(myCairo, op);
-        }
-
-     protected:
-        double myWidth;
-
-        double myHeight;
-
-        PacaSurface mySurface;
-
-        cairo_t * myCairo;
-
-        PangoFontDescription * myFontDescription;
-
-     private:
-        SYS_DEFINE_CLASS_NAME("PaCaLib::PacaTarget");
-
-        double myTextOutline;
-
-        Colour myTextOutlineColour;
-
-    }; // class PacaTarget
+    }; // class Target
 
 } // namespace PaCaLib
+
+AUTON_INTERFACE(PaCaLib::Surface);
+AUTON_INTERFACE(PaCaLib::Target);
 
 #endif /* __SRC_PACALIB_H_INCLUDED__ */
 

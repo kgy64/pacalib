@@ -7,16 +7,12 @@ VERS_MINOR           =  1
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-BASE_LIBRARIES       =  pangocairo
-
 export SRCDIR        =  .
 
 .PHONY: all
 all: _everything
 
 include $(SCRIPTDIR)/makelib
-
-export LFLAGS       +=  $(MY_PROJECT_LIBS)
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
