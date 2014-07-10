@@ -4,7 +4,15 @@
  * Purpose:     Interface for my rendering library
  * Author:      György Kövesdi (kgy@teledigit.eu)
  * Licence:     GPL (see file 'COPYING' in the project root for more details)
- * Comments:    Can be implemented for different backends
+ * Comments:    Can be implemented for different backends.
+ *              Currently available implementations are:
+ *              - pacalib-linux:
+ *                Implementation for a generic Linux, using Pango+Cairo.
+ *                Repository path: git.teledigit.eu/devel/pacalib-linux.git
+ *              - pacalib-android:
+ *                Implementation for Android, using the built-in Java-based
+ *                drawing functions.
+ *                Repository path: git.teledigit.eu/devel/pacalib-android.git
  *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
