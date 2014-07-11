@@ -12,4 +12,16 @@
 
 SYS_DEFINE_MODULE(DM_PACALIB);
 
+using namespace PaCaLib;
+
+Surface::~Surface()
+{
+ SYS_DEBUG_MEMBER(DM_PACALIB);
+}
+
+Target::~Target()
+{
+ SYS_DEBUG_MEMBER(DM_PACALIB);
+}
+
 /* * * * * * * * * * * * * End - of - File * * * * * * * * * * * * * * */

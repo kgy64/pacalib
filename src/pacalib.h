@@ -19,6 +19,7 @@
 #ifndef __SRC_PACALIB_H_INCLUDED__
 #define __SRC_PACALIB_H_INCLUDED__
 
+#include <glesly/target2d.h>
 #include <Debug/Debug.h>
 
 #include <boost/shared_ptr.hpp>
@@ -58,10 +59,14 @@ namespace PaCaLib
         RIGHT
     };
 
+    enum LineCap {
+    };
+
     class Surface
     {
      public:
-        static SurfacePtr Get(int width, int height);
+        virtual ~Surface();
+        static SurfacePtr Create(int width, int height);
 
         virtual void * getData(void) =0;
         virtual const void * getData(void) const =0;
@@ -74,10 +79,11 @@ namespace PaCaLib
 
     }; // class Surface;
 
-    class Target
+    class Target: public Glesly::Target2D
     {
      public:
-        static TargetPtr Get(int width, int height);
+        virtual ~Target();
+        static TargetPtr Create(int width, int height);
 
         virtual int GetWidth(void) const =0;
         virtual int GetHeight(void) const =0;
@@ -90,7 +96,7 @@ namespace PaCaLib
         virtual void SetLineWidth(double width) =0;
         virtual void Move(double x, double y) =0;
         virtual void Line(double x, double y) =0;
-        virtual void SetLineCap(cairo_line_cap_t mode) =0;
+        virtual void SetLineCap(LineCap mode) =0;
         virtual void SetColour(double r, double g, double b) =0;
         virtual void SetColour(double r, double g, double b, double a) =0;
         virtual void SetColour(const Colour & col) =0;
