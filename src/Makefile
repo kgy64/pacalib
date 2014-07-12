@@ -2,7 +2,7 @@
 # This is the Android implementation
 #
 
-NAME                 =  PaCaLib_Android
+NAME                 =  PaCaLib_Base
 VERS_MAJOR           =  0
 VERS_MINOR           =  1
 

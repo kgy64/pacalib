@@ -59,7 +59,13 @@ namespace PaCaLib
         RIGHT
     };
 
+    enum Oper {
+        OP_SOURCE,
+        OP_OVER
+    };
+
     enum LineCap {
+        LINE_CAP_ROUND
     };
 
     class Surface
@@ -110,6 +116,7 @@ namespace PaCaLib
         virtual void SetTextOutline(double outline) =0;
         virtual void Paint(void) =0;
         virtual void Paint(double alpha) =0;
+        virtual void Operator(Oper op) =0;
 
      private:
         SYS_DEFINE_CLASS_NAME("PaCaLib::Target");
@@ -117,9 +124,6 @@ namespace PaCaLib
     }; // class Target
 
 } // namespace PaCaLib
-
-AUTON_INTERFACE(PaCaLib::Surface);
-AUTON_INTERFACE(PaCaLib::Target);
 
 #endif /* __SRC_PACALIB_H_INCLUDED__ */
 
