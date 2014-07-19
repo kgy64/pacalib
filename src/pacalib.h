@@ -91,9 +91,6 @@ namespace PaCaLib
         virtual ~Target();
         static TargetPtr Create(int width, int height);
 
-        virtual int GetWidth(void) const =0;
-        virtual int GetHeight(void) const =0;
-        virtual const void * GetPixelData(void) const =0;
         virtual int GetLogicalWidth(void) const =0;
         virtual void Scale(double w, double h) =0;
         virtual void Stroke(void) =0;
