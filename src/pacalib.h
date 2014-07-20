@@ -23,14 +23,12 @@
 #include <Debug/Debug.h>
 
 #include <boost/shared_ptr.hpp>
+#include <ostream>
 
 SYS_DECLARE_MODULE(DM_PACALIB);
 
 namespace PaCaLib
 {
-    class Surface;
-    typedef boost::shared_ptr<Surface> SurfacePtr;
-
     class Target;
     typedef boost::shared_ptr<Target> TargetPtr;
 
@@ -51,6 +49,11 @@ namespace PaCaLib
         double b;
         double a;
 
+        inline std::ostream & toStream(std::ostream & os) const
+        {
+            return os << "{" << r << ", " << g << ", " << b << ", " << a << "}";
+        }
+
     }; // struct Colour
 
     enum TextMode {
@@ -67,23 +70,6 @@ namespace PaCaLib
     enum LineCap {
         LINE_CAP_ROUND
     };
-
-    class Surface
-    {
-     public:
-        virtual ~Surface();
-        static SurfacePtr Create(int width, int height);
-
-        virtual void * getData(void) =0;
-        virtual const void * getData(void) const =0;
-        virtual int getWidth(void) const =0;
-        virtual int getPhysicalWidth(void) const =0;
-        virtual int getHeight(void) const =0;
-
-     private:
-        SYS_DEFINE_CLASS_NAME("PaCaLib::Surface");
-
-    }; // class Surface;
 
     class Target: public Glesly::Target2D
     {
@@ -121,6 +107,11 @@ namespace PaCaLib
     }; // class Target
 
 } // namespace PaCaLib
+
+inline std::ostream & operator<<(std::ostream & os, const PaCaLib::Colour & col)
+{
+ return col.toStream(os);
+}
 
 #endif /* __SRC_PACALIB_H_INCLUDED__ */
 
