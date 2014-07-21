@@ -1,5 +1,5 @@
 # Makefile for my renderer library PaCaLib
-# This is the Android implementation
+# This is the opsys-independent Interface
 #
 
 NAME                 =  PaCaLib_Base
