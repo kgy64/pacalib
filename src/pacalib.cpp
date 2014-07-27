@@ -10,8 +10,6 @@
 
 #include "pacalib.h"
 
-AUTON_INTERFACE(PaCaLib::Target);
-
 SYS_DEFINE_MODULE(DM_PACALIB);
 
 using namespace PaCaLib;
