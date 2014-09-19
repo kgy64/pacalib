@@ -22,7 +22,7 @@
 #include <glesly/target2d.h>
 #include <Debug/Debug.h>
 
-#include <boost/shared_ptr.hpp>
+#include <Memory/Memory.h>
 #include <ostream>
 
 SYS_DECLARE_MODULE(DM_PACALIB);
@@ -30,7 +30,7 @@ SYS_DECLARE_MODULE(DM_PACALIB);
 namespace PaCaLib
 {
     class Target;
-    typedef boost::shared_ptr<Target> TargetPtr;
+    typedef MEM::shared_ptr<Target> TargetPtr;
 
     void Initialize(void);
 
