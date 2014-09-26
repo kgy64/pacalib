@@ -94,15 +94,18 @@ namespace PaCaLib
         virtual void NewPath(void) =0;
         virtual void NewSubPath(void) =0;
         virtual void ClosePath(void) =0;
-        virtual double DrawText(double x, double y, TextMode mode, const char * text, double size, double aspect = 1.0) =0;
         virtual void SetTextOutlineColour(double r, double g, double b, double a = 1.0) =0;
         virtual void SetTextOutline(double outline) =0;
         virtual void Paint(void) =0;
         virtual void Paint(double alpha) =0;
         virtual void Operator(Oper op) =0;
 
+        double DrawText(double x, double y, TextMode mode, const char * text, double size, double aspect = 1.0);
+
      private:
         SYS_DEFINE_CLASS_NAME("PaCaLib::Target");
+
+        virtual double DrawTextInternal(double x, double y, TextMode mode, const char * text, double size, double offset, double aspect = 1.0) =0;
 
     }; // class Target
 
