@@ -24,7 +24,7 @@ Target::~Target()
  SYS_DEBUG_MEMBER(DM_PACALIB);
 }
 
-double Target::DrawText(double x, double y, TextMode mode, const char * text, double size, double aspect)
+float Target::DrawText(float x, float y, TextMode mode, const char * text, float size, float aspect)
 {
  SYS_DEBUG_MEMBER(DM_PACALIB);
 
@@ -59,7 +59,7 @@ double Target::DrawText(double x, double y, TextMode mode, const char * text, do
  SYS_DEBUG(DL_INFO2, "Drawing text: lines=" << lines.size());
 
  float offset = ((int)lines.size() - 1) / 2.0f;
- double result = 0.0;
+ float result = 0.0f;
  for (std::vector<uint8_t *>::const_iterator i = lines.begin(); i < lines.end(); ++i) {
     const char * line = reinterpret_cast<const char *>(*i);
     result += DrawTextInternal(x, y, mode, line, size, offset, aspect);

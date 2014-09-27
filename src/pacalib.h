@@ -1,18 +1,18 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  *
  * Project:     PaCaLib
- * Purpose:     Interface for my rendering library
+ * Purpose:     Interface for my generic Software Rendering Library
  * Author:      György Kövesdi (kgy@teledigit.eu)
  * Licence:     GPL (see file 'COPYING' in the project root for more details)
  * Comments:    Can be implemented for different backends.
  *              Currently available implementations are:
  *              - pacalib-linux:
  *                Implementation for a generic Linux, using Pango+Cairo.
- *                Repository path: git.teledigit.eu/devel/pacalib-linux.git
+ *                Repository path: git.teledigit.eu/devel/Linux/pacalib-pango.git
  *              - pacalib-android:
  *                Implementation for Android, using the built-in Java-based
  *                drawing functions.
- *                Repository path: git.teledigit.eu/devel/pacalib-android.git
+ *                Repository path: git.teledigit.eu/devel/Android/pacalib-android.git
  *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -36,7 +36,7 @@ namespace PaCaLib
 
     struct Colour
     {
-        Colour(double r, double g, double b, double a):
+        Colour(float r, float g, float b, float a):
             r(r),
             g(g),
             b(b),
@@ -44,10 +44,10 @@ namespace PaCaLib
         {
         }
 
-        double r;
-        double g;
-        double b;
-        double a;
+        float r;
+        float g;
+        float b;
+        float a;
 
         inline std::ostream & toStream(std::ostream & os) const
         {
@@ -71,6 +71,32 @@ namespace PaCaLib
         LINE_CAP_ROUND
     };
 
+    class Path
+    {
+     protected:
+        inline Path(void)
+        {
+            SYS_DEBUG_MEMBER(DM_PACALIB);
+        }
+
+     public:
+        virtual ~Path()
+        {
+            SYS_DEBUG_MEMBER(DM_PACALIB);
+        }
+
+        virtual void Move(float x, float y) =0;
+        virtual void Line(float x, float y) =0;
+        virtual void Arc(float xc, float yc, float r, float a1, float a2) =0;
+        virtual void Close(void) =0;
+
+     private:
+        SYS_DEFINE_CLASS_NAME("PaCaAndroid::Path");
+
+    }; // class PaCaLib::Path
+
+    typedef MEM::shared_ptr<Path> PathPtr;
+
     class Target: public Glesly::Target2D
     {
      public:
@@ -78,34 +104,32 @@ namespace PaCaLib
         static TargetPtr Create(int width, int height);
 
         virtual int GetLogicalWidth(void) const =0;
-        virtual void Scale(double w, double h) =0;
+        virtual void Scale(float w, float h) =0;
         virtual void Stroke(void) =0;
         virtual void Fill(void) =0;
         virtual void FillPreserve(void) =0;
-        virtual void SetLineWidth(double width) =0;
-        virtual void Move(double x, double y) =0;
-        virtual void Line(double x, double y) =0;
+        virtual void SetLineWidth(float width) =0;
+        virtual void Move(float x, float y) =0;
+        virtual void Line(float x, float y) =0;
         virtual void SetLineCap(LineCap mode) =0;
-        virtual void SetColour(double r, double g, double b) =0;
-        virtual void SetColour(double r, double g, double b, double a) =0;
+        virtual void SetColour(float r, float g, float b) =0;
+        virtual void SetColour(float r, float g, float b, float a) =0;
         virtual void SetColour(const Colour & col) =0;
-        virtual void Rectangle(double x, double y, double w, double h) =0;
-        virtual void Arc(double xc, double yc, double r, double a1, double a2) =0;
-        virtual void NewPath(void) =0;
-        virtual void NewSubPath(void) =0;
-        virtual void ClosePath(void) =0;
-        virtual void SetTextOutlineColour(double r, double g, double b, double a = 1.0) =0;
-        virtual void SetTextOutline(double outline) =0;
+        virtual void Rectangle(float x, float y, float w, float h) =0;
+        virtual void Arc(float xc, float yc, float r, float a1, float a2) =0;
+        virtual void SetTextOutlineColour(float r, float g, float b, float a = 1.0) =0;
+        virtual void SetTextOutline(float outline) =0;
         virtual void Paint(void) =0;
-        virtual void Paint(double alpha) =0;
+        virtual void Paint(float alpha) =0;
         virtual void Operator(Oper op) =0;
+        virtual PathPtr NewPath(void) =0;
 
-        double DrawText(double x, double y, TextMode mode, const char * text, double size, double aspect = 1.0);
+        float DrawText(float x, float y, TextMode mode, const char * text, float size, float aspect = 1.0);
 
      private:
         SYS_DEFINE_CLASS_NAME("PaCaLib::Target");
 
-        virtual double DrawTextInternal(double x, double y, TextMode mode, const char * text, double size, double offset, double aspect = 1.0) =0;
+        virtual float DrawTextInternal(float x, float y, TextMode mode, const char * text, float size, float offset, float aspect = 1.0) =0;
 
     }; // class Target
 
