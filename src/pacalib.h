@@ -89,6 +89,14 @@ namespace PaCaLib
         virtual void Line(float x, float y) =0;
         virtual void Arc(float xc, float yc, float r, float a1, float a2) =0;
         virtual void Close(void) =0;
+        virtual void Clear(void) =0;
+        virtual void SetLineWidth(float width) =0;
+        virtual void SetLineCap(LineCap mode) =0;
+        virtual void Fill(void) =0;
+        virtual void Stroke(void) =0;
+        virtual void SetColour(float r, float g, float b) =0;
+        virtual void SetColour(float r, float g, float b, float a) =0;
+        virtual void SetColour(const Colour & col) =0;
 
      private:
         SYS_DEFINE_CLASS_NAME("PaCaAndroid::Path");
@@ -105,9 +113,6 @@ namespace PaCaLib
 
         virtual int GetLogicalWidth(void) const =0;
         virtual void Scale(float w, float h) =0;
-        virtual void Stroke(void) =0;
-        virtual void Fill(void) =0;
-        virtual void FillPreserve(void) =0;
         virtual void SetLineWidth(float width) =0;
         virtual void Move(float x, float y) =0;
         virtual void Line(float x, float y) =0;
