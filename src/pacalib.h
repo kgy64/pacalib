@@ -105,21 +105,32 @@ namespace PaCaLib
 
     typedef MEM::shared_ptr<Path> PathPtr;
 
+    class Draw;
+    typedef MEM::shared_ptr<Draw> DrawPtr;
+
     class Target: public Glesly::Target2D
     {
      public:
         virtual ~Target();
-        static TargetPtr Create(int width, int height);
+        static TargetPtr Create(int width, int height); // must be defined in the specialization
 
         virtual int GetLogicalWidth(void) const =0;
+        virtual DrawPtr Draw(void) =0;
+
+     private:
+        SYS_DEFINE_CLASS_NAME("PaCaLib::Target");
+
+    }; // class Target
+
+    class Draw
+    {
+     public:
         virtual void Scale(float w, float h) =0;
         virtual void SetLineWidth(float width) =0;
         virtual void Move(float x, float y) =0;
         virtual void Line(float x, float y) =0;
         virtual void SetLineCap(LineCap mode) =0;
-        virtual void SetColour(float r, float g, float b) =0;
         virtual void SetColour(float r, float g, float b, float a) =0;
-        virtual void SetColour(const Colour & col) =0;
         virtual void Rectangle(float x, float y, float w, float h) =0;
         virtual void Arc(float xc, float yc, float r, float a1, float a2) =0;
         virtual void SetTextOutlineColour(float r, float g, float b, float a = 1.0) =0;
@@ -131,12 +142,22 @@ namespace PaCaLib
 
         float DrawText(float x, float y, TextMode mode, const char * text, float size, float aspect = 1.0);
 
+        inline void SetColour(float r, float g, float b)
+        {
+            SetColour(r, g, b, 1.0f);
+        }
+
+        inline void SetColour(const Colour & col)
+        {
+            SetColour(col.r, col.g, col.b, col.a);
+        }
+
      private:
-        SYS_DEFINE_CLASS_NAME("PaCaLib::Target");
+        SYS_DEFINE_CLASS_NAME("PaCaLib::Draw");
 
         virtual float DrawTextInternal(float x, float y, TextMode mode, const char * text, float size, float offset, float aspect = 1.0) =0;
 
-    }; // class Target
+    }; // class PaCaLib::Draw
 
 } // namespace PaCaLib
 

@@ -19,12 +19,24 @@ SYS_DEFINE_MODULE(DM_PACALIB);
 
 using namespace PaCaLib;
 
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *\
+ *                                                                                       *
+ *     class Target:                                                                     *
+ *                                                                                       *
+\* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
 Target::~Target()
 {
  SYS_DEBUG_MEMBER(DM_PACALIB);
 }
 
-float Target::DrawText(float x, float y, TextMode mode, const char * text, float size, float aspect)
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *\
+ *                                                                                       *
+ *     class Draw:                                                                       *
+ *                                                                                       *
+\* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+float Draw::DrawText(float x, float y, TextMode mode, const char * text, float size, float aspect)
 {
  SYS_DEBUG_MEMBER(DM_PACALIB);
 
