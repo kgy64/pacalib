@@ -94,9 +94,17 @@ namespace PaCaLib
         virtual void SetLineCap(LineCap mode) =0;
         virtual void Fill(void) =0;
         virtual void Stroke(void) =0;
-        virtual void SetColour(float r, float g, float b) =0;
         virtual void SetColour(float r, float g, float b, float a) =0;
-        virtual void SetColour(const Colour & col) =0;
+
+        inline void SetColour(float r, float g, float b)
+        {
+            SetColour(r, g, b, 1.0f);
+        }
+
+        inline void SetColour(const Colour & col)
+        {
+            SetColour(col.r, col.g, col.b, col.a);
+        }
 
      private:
         SYS_DEFINE_CLASS_NAME("PaCaAndroid::Path");
