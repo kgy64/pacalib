@@ -94,6 +94,15 @@ namespace PaCaLib
         virtual void NewPath(void) =0;
         virtual void NewSubPath(void) =0;
         virtual void ClosePath(void) =0;
+
+        /// Draw an UTF8 text
+        /*! \param  y       The Y coordinate of the origin
+         *  \param  mode    Select the origin position
+         *  \param  text    The UTF8 string to be drawn
+         *  \param  size    Relative vertical size of the text. The value 1.0 will fit the whole target image
+         *                  vertically.
+         *  \param  aspect  The aspect ratio of the target image. It is necessary to keep the glyphs' aspect correctly.
+         *  \note   The newlines of the string are handled. The given x/y position is the origin of the first line. */
         virtual double DrawText(double x, double y, TextMode mode, const char * text, double size, double aspect = 1.0) =0;
         virtual void SetTextOutlineColour(double r, double g, double b, double a = 1.0) =0;
         virtual void SetTextOutline(double outline) =0;
