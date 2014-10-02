@@ -108,7 +108,11 @@ namespace PaCaLib
         virtual ~Target();
         static TargetPtr Create(int width, int height); // must be defined in the specialization
 
-        virtual int GetLogicalWidth(void) const =0;
+        virtual int GetLogicalWidth(void) const
+        {
+            return GetWidth();
+        }
+
         virtual DrawPtr Draw(void) =0;
 
      private:
