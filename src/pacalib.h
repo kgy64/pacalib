@@ -68,6 +68,7 @@ namespace PaCaLib
     };
 
     enum LineCap {
+        LINE_CAP_NONE,
         LINE_CAP_ROUND,
         LINE_CAP_SQUARE
     };
