@@ -72,6 +72,11 @@ namespace PaCaLib
         LINE_CAP_SQUARE
     };
 
+    enum Style {
+        STROKE,
+        FILL
+    };
+
     class Path
     {
      protected:
@@ -130,6 +135,7 @@ namespace PaCaLib
         virtual void SetTextOutline(float outline) =0;
         virtual void SetLineWidth(float width) =0;
         virtual void SetLineCap(LineCap mode) =0;
+        virtual void SetStyle(Style style) =0;
         virtual void Paint(void) =0;
         virtual void Paint(float alpha) =0;
         virtual void Fill(void) =0;
