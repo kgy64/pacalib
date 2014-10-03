@@ -134,9 +134,13 @@ namespace PaCaLib
         virtual void SetLineCap(LineCap mode) =0;
         virtual void Paint(void) =0;
         virtual void Paint(float alpha) =0;
-        virtual void Fill(void) =0;
         virtual void Operator(Oper op) =0;
         virtual PathPtr NewPath(void) =0;
+
+        /// Fill the whole canvas
+        /*! \warning    Do not use this function because its behavior is not compatible: PangoCairo fills
+         *              only the actual path, if any. */
+        virtual void Fill(void) =0;
 
         /// Draw an UTF8 text
         /*! \param  y       The Y coordinate of the origin
