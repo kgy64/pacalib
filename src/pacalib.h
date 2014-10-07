@@ -19,6 +19,7 @@
 #ifndef __SRC_PACALIB_H_INCLUDED__
 #define __SRC_PACALIB_H_INCLUDED__
 
+#include <glesly/format.h>
 #include <glesly/target2d.h>
 #include <Debug/Debug.h>
 
@@ -104,7 +105,7 @@ namespace PaCaLib
     {
      public:
         virtual ~Target();
-        static TargetPtr Create(int width, int height); // must be defined in the specialization
+        static TargetPtr Create(int width, int height, Glesly::PixelFormat format = Glesly::FORMAT_RGBA_8888); // must be defined in the specialization
 
         virtual int GetLogicalWidth(void) const
         {
