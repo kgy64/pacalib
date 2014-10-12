@@ -105,7 +105,7 @@ namespace PaCaLib
     {
      public:
         virtual ~Target();
-        static TargetPtr Create(int width, int height, Glesly::PixelFormat format = Glesly::FORMAT_RGBA_8888); // must be defined in the specialization
+        static TargetPtr Create(int width, int height, Glesly::PixelFormat format = Glesly::FORMAT_DEFAULT); // must be defined in the specialization
 
         virtual int GetLogicalWidth(void) const
         {
