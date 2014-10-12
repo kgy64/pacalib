@@ -117,7 +117,7 @@ namespace PaCaLib
      private:
         SYS_DEFINE_CLASS_NAME("PaCaLib::Target");
 
-    }; // class Target
+    }; // class PaCaLib::Target
 
     class Draw
     {
