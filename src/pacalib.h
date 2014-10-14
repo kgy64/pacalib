@@ -93,6 +93,7 @@ namespace PaCaLib
         virtual void Move(float x, float y) =0;
         virtual void Line(float x, float y) =0;
         virtual void Arc(float xc, float yc, float r, float a1, float a2) =0;
+        virtual void Bezier(float x, float y, float dx, float dy) =0;
         virtual void Close(void) =0;
         virtual void Clear(void) =0;
         virtual void Stroke(void) =0;
