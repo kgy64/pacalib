@@ -69,6 +69,13 @@ namespace PaCaLib
         LINE_CAP_SQUARE
     };
 
+    enum ColourCompose {
+        COLOUR_COMPOSE_DEFAULT,
+        COLOUR_COMPOSE_ADD,
+        COLOUR_COMPOSE_SUBTRACT,
+        COLOUR_COMPOSE_OVERWRITE
+    };
+
     class Path
     {
      protected:
@@ -124,6 +131,7 @@ namespace PaCaLib
      public:
         virtual void Scale(float w, float h) =0;
         virtual void SetColour(float r, float g, float b, float a) =0;
+        virtual void SetColourCompose(ColourCompose mode = PaCaLib::COLOUR_COMPOSE_DEFAULT) =0;
         virtual void SetTextOutlineColour(float r, float g, float b, float a = 1.0) =0;
         virtual void SetTextOutline(float outline) =0;
         virtual void SetLineWidth(float width) =0;
@@ -160,10 +168,12 @@ namespace PaCaLib
 
 } // namespace PaCaLib
 
-inline std::ostream & operator<<(std::ostream & os, const PaCaLib::Colour & col)
+static inline std::ostream & operator<<(std::ostream & os, const PaCaLib::Colour & col)
 {
  return col.toStream(os);
 }
+
+std::ostream & operator<<(std::ostream & os, PaCaLib::ColourCompose mode);
 
 #endif /* __SRC_PACALIB_H_INCLUDED__ */
 

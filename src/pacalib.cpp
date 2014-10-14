@@ -80,4 +80,32 @@ float Draw::DrawText(float x, float y, TextMode mode, const char * text, float s
  return result;
 }
 
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *\
+ *                                                                                       *
+ *     Generic functions:                                                                *
+ *                                                                                       *
+\* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+std::ostream & operator<<(std::ostream & os, ColourCompose mode)
+{
+ switch (mode) {
+    case COLOUR_COMPOSE_DEFAULT:
+        os << "COLOUR_COMPOSE_DEFAULT";
+    break;
+    case COLOUR_COMPOSE_ADD:
+        os << "COLOUR_COMPOSE_ADD";
+    break;
+    case COLOUR_COMPOSE_SUBTRACT:
+        os << "COLOUR_COMPOSE_SUBTRACT";
+    break;
+    case COLOUR_COMPOSE_OVERWRITE:
+        os << "COLOUR_COMPOSE_OVERWRITE";
+    break;
+    default:
+        os << "unknown colour compose: " << (int)mode;
+    break;
+ }
+ return os;
+}
+
 /* * * * * * * * * * * * * End - of - File * * * * * * * * * * * * * * */
