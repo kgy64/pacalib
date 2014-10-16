@@ -122,6 +122,8 @@ namespace PaCaLib
 
         virtual DrawPtr Draw(void) =0;
 
+        virtual Glesly::Target2D & operator=(const Glesly::Target2D & other) =0;    // from Glesly::Target2D
+
      private:
         SYS_DEFINE_CLASS_NAME("PaCaLib::Target");
 
