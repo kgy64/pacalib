@@ -21,9 +21,9 @@
 
 #include <glesly/format.h>
 #include <glesly/target2d.h>
+#include <Memory/Memory.h>
 #include <Debug/Debug.h>
 
-#include <Memory/Memory.h>
 #include <ostream>
 
 SYS_DECLARE_MODULE(DM_PACALIB);
@@ -104,10 +104,10 @@ namespace PaCaLib
 
     }; // class PaCaLib::Path
 
-    typedef MEM::shared_ptr<Path> PathPtr;
+    typedef MEM::shared_ptr<PaCaLib::Path> PathPtr;
 
     class Draw;
-    typedef MEM::shared_ptr<Draw> DrawPtr;
+    typedef MEM::shared_ptr<PaCaLib::Draw> DrawPtr;
 
     class Target: public Glesly::Target2D
     {
@@ -137,13 +137,13 @@ namespace PaCaLib
      public:
         virtual void Scale(float w, float h) =0;
         virtual void SetColour(float r, float g, float b, float a) =0;
-        virtual void SetColourCompose(ColourCompose mode = PaCaLib::COLOUR_COMPOSE_DEFAULT) =0;
+        virtual void SetColourCompose(PaCaLib::ColourCompose mode = PaCaLib::COLOUR_COMPOSE_DEFAULT) =0;
         virtual void SetTextOutlineColour(float r, float g, float b, float a = 1.0) =0;
         virtual void SetTextOutline(float outline) =0;
         virtual void SetLineWidth(float width) =0;
-        virtual void SetLineCap(LineCap mode) =0;
+        virtual void SetLineCap(PaCaLib::LineCap mode) =0;
         virtual void Paint(void) =0;
-        virtual PathPtr NewPath(void) =0;
+        virtual PaCaLib::PathPtr NewPath(void) =0;
 
         /// Draw an UTF8 text
         /*! \param  y       The Y coordinate of the origin
@@ -153,7 +153,7 @@ namespace PaCaLib
          *                  vertically.
          *  \param  aspect  The aspect ratio of the target image. It is necessary to keep the glyphs' aspect correctly.
          *  \note   The newlines of the string are handled. The given x/y position is the origin of the first line. */
-        float DrawText(float x, float y, TextMode mode, const char * text, float size, float aspect = 1.0);
+        float DrawText(float x, float y, PaCaLib::TextMode mode, const char * text, float size, float aspect = 1.0);
 
         inline void SetColour(float r, float g, float b)
         {
@@ -168,7 +168,7 @@ namespace PaCaLib
      private:
         SYS_DEFINE_CLASS_NAME("PaCaLib::Draw");
 
-        virtual float DrawTextInternal(float x, float y, TextMode mode, const char * text, float size, float offset, float aspect = 1.0) =0;
+        virtual float DrawTextInternal(float x, float y, PaCaLib::TextMode mode, const char * text, float size, float offset, float aspect = 1.0) =0;
 
     }; // class PaCaLib::Draw
 
