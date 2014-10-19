@@ -100,7 +100,7 @@ namespace PaCaLib
         virtual void Fill(void) =0;
 
      private:
-        SYS_DEFINE_CLASS_NAME("PaCaAndroid::Path");
+        SYS_DEFINE_CLASS_NAME("PaCaLib::Path");
 
     }; // class PaCaLib::Path
 
@@ -153,7 +153,7 @@ namespace PaCaLib
          *                  vertically.
          *  \param  aspect  The aspect ratio of the target image. It is necessary to keep the glyphs' aspect correctly.
          *  \note   The newlines of the string are handled. The given x/y position is the origin of the first line. */
-        float DrawText(float x, float y, PaCaLib::TextMode mode, const char * text, float size, float aspect = 1.0);
+        float DrawText(float x, float y, PaCaLib::TextMode mode, const char * text, float size, float aspect = 1.0, float rotation = 0.0f);
 
         inline void SetColour(float r, float g, float b)
         {
@@ -168,7 +168,7 @@ namespace PaCaLib
      private:
         SYS_DEFINE_CLASS_NAME("PaCaLib::Draw");
 
-        virtual float DrawTextInternal(float x, float y, PaCaLib::TextMode mode, const char * text, float size, float offset, float aspect = 1.0) =0;
+        virtual float DrawTextInternal(float x, float y, PaCaLib::TextMode mode, const char * text, float size, float offset, float aspect, float rotation) =0;
 
     }; // class PaCaLib::Draw
 

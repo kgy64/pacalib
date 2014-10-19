@@ -35,7 +35,7 @@ Target::~Target()
  *                                                                                       *
 \* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-float Draw::DrawText(float x, float y, TextMode mode, const char * text, float size, float aspect)
+float Draw::DrawText(float x, float y, TextMode mode, const char * text, float size, float aspect, float rotation)
 {
  SYS_DEBUG_MEMBER(DM_PACALIB);
 
@@ -45,7 +45,7 @@ float Draw::DrawText(float x, float y, TextMode mode, const char * text, float s
  if (!newline) {
     SYS_DEBUG(DL_INFO2, "Drawing text: one-line text.");
     // Single-line text, use offset=0:
-    return DrawTextInternal(x, y, mode, text, size, 0.0f, aspect);
+    return DrawTextInternal(x, y, mode, text, size, 0.0f, aspect, rotation);
  }
 
  uint8_t * myText = reinterpret_cast<uint8_t *>(alloca(strlen(text)+1));
@@ -73,7 +73,7 @@ float Draw::DrawText(float x, float y, TextMode mode, const char * text, float s
  float result = 0.0f;
  for (std::vector<uint8_t *>::const_iterator i = lines.begin(); i < lines.end(); ++i) {
     const char * line = reinterpret_cast<const char *>(*i);
-    result += DrawTextInternal(x, y, mode, line, size, offset, aspect);
+    result += DrawTextInternal(x, y, mode, line, size, offset, aspect, rotation);
     offset -= 1.0f;
  }
 
