@@ -155,6 +155,8 @@ namespace PaCaLib
          *  \note   The newlines of the string are handled. The given x/y position is the origin of the first line. */
         float DrawText(float x, float y, PaCaLib::TextMode mode, const char * text, float size, float aspect = 1.0, float rotation = 0.0f);
 
+        virtual float DrawTextInternal(float x, float y, PaCaLib::TextMode mode, const char * text, float size, float offset, float aspect, float rotation, float shear_x, float shear_y) =0;
+
         inline void SetColour(float r, float g, float b)
         {
             SetColour(r, g, b, 1.0f);
@@ -167,8 +169,6 @@ namespace PaCaLib
 
      private:
         SYS_DEFINE_CLASS_NAME("PaCaLib::Draw");
-
-        virtual float DrawTextInternal(float x, float y, PaCaLib::TextMode mode, const char * text, float size, float offset, float aspect, float rotation) =0;
 
     }; // class PaCaLib::Draw
 
