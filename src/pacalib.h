@@ -90,14 +90,21 @@ namespace PaCaLib
             SYS_DEBUG_MEMBER(DM_PACALIB);
         }
 
+        enum DrawMode
+        {
+            DRAW_NONE               = 0,
+            DRAW_STROKE             = 1,
+            DRAW_FILL               = 2,
+            DRAW_STROKE_AND_FILL    = 3
+        };
+
         virtual void Move(float x, float y) =0;
         virtual void Line(float x, float y) =0;
         virtual void Arc(float xc, float yc, float r, float a1, float a2) =0;
         virtual void Bezier(float x, float y, float dx, float dy) =0;
         virtual void Close(void) =0;
         virtual void Clear(void) =0;
-        virtual void Stroke(void) =0;
-        virtual void Fill(void) =0;
+        virtual void Draw(DrawMode mode = DRAW_STROKE) =0;
 
      private:
         SYS_DEFINE_CLASS_NAME("PaCaLib::Path");
@@ -135,37 +142,96 @@ namespace PaCaLib
     class Draw
     {
      public:
+        inline Draw(void)
+        {
+            SYS_DEBUG_MEMBER(DM_PACALIB);
+        }
+
+        virtual ~Draw()
+        {
+            SYS_DEBUG_MEMBER(DM_PACALIB);
+        }
+
         virtual void Scale(float w, float h) =0;
-        virtual void SetColour(float r, float g, float b, float a) =0;
         virtual void SetColourCompose(PaCaLib::ColourCompose mode = PaCaLib::COLOUR_COMPOSE_DEFAULT) =0;
-        virtual void SetTextOutlineColour(float r, float g, float b, float a = 1.0) =0;
-        virtual void SetTextOutline(float outline) =0;
+        virtual void SetColour(float r, float g, float b, float a = 1.0f) =0;
+        virtual void SetOutlineColour(float r, float g, float b, float a = 1.0f) =0;
+        virtual void SetOutlineWidth(float outline) =0;
         virtual void SetLineWidth(float width) =0;
         virtual void SetLineCap(PaCaLib::LineCap mode) =0;
         virtual void Paint(void) =0;
         virtual PaCaLib::PathPtr NewPath(void) =0;
 
         /// Draw an UTF8 text
-        /*! \param  y       The Y coordinate of the origin
-         *  \param  mode    Select the origin position
-         *  \param  text    The UTF8 string to be drawn
-         *  \param  size    Relative vertical size of the text. The value 1.0 will fit the whole target image
-         *                  vertically.
-         *  \param  aspect  The aspect ratio of the target image. It is necessary to keep the glyphs' aspect correctly.
+        /*! \param  x           The X coordinate of the origin (-1.0 ... +1.0)
+         *  \param  y           The Y coordinate of the origin (-1.0 ... +1.0)
+         *  \param  mode        Select the origin position
+         *  \param  text        The UTF8 string to be drawn
+         *  \param  size        Relative vertical size of the text. The value 1.0 will fit the whole target image vertically.
+         *  \param  aspect      The aspect ratio of the target image. It is necessary to keep the glyphs' aspect correctly.
+         *  \param  rotation    The rotation angle of the text, in radians.
+         *  \param  shear_x     Horizontal shear (tangent alpha)
+         *  \param  shear_y     Vertical shear (tangent alpha)
          *  \note   The newlines of the string are handled. The given x/y position is the origin of the first line. */
-        float DrawText(float x, float y, PaCaLib::TextMode mode, const char * text, float size, float aspect = 1.0, float rotation = 0.0f);
-
-        virtual float DrawTextInternal(float x, float y, PaCaLib::TextMode mode, const char * text, float size, float offset, float aspect, float rotation, float shear_x, float shear_y) =0;
-
-        inline void SetColour(float r, float g, float b)
-        {
-            SetColour(r, g, b, 1.0f);
-        }
+        float DrawText(float x, float y, PaCaLib::TextMode mode, const char * text, float size, float aspect = 1.0, float rotation = 0.0f, float shear_x = 0.0f, float shear_y = 0.0f);
 
         inline void SetColour(const Colour & col)
         {
             SetColour(col.r, col.g, col.b, col.a);
         }
+
+        struct TextParams {
+
+            const char * text;
+            float x;
+            float y;
+            PaCaLib::TextMode mode;
+            float size;
+            float offset;
+            float aspect;
+            float rotation;
+            float shear_x;
+            float shear_y;
+
+            void toStream(std::ostream & os) const;
+
+        }; // struct PaCaLib::Draw::TextParams
+
+        struct Distortion {
+
+            inline Distortion(void):
+                obj_size(1.0f),
+                scene_height(1.0f),
+                rotation(0.0f),
+                obj_height(1.0f),
+                shear_x(0.0f),
+                shear_y(0.0f)
+            {
+            }
+
+            /// Size correction of the object
+            float obj_size;
+
+            /// Size correction after rotation
+            float scene_height;
+
+            /// Addidional rotation of the object
+            float rotation;
+
+            /// Height correction of the object
+            float obj_height;
+
+            /// Horizontal shear of the object
+            float shear_x;
+
+            /// Verical; shear of the object
+            float shear_y;
+
+            void toStream(std::ostream & os) const;
+
+        }; // struct PaCaLib::Draw::Distortion
+
+        virtual float DrawTextInternal(const TextParams & params, const Distortion * distortion = nullptr) =0;
 
      private:
         SYS_DEFINE_CLASS_NAME("PaCaLib::Draw");
@@ -180,6 +246,18 @@ static inline std::ostream & operator<<(std::ostream & os, const PaCaLib::Colour
 }
 
 std::ostream & operator<<(std::ostream & os, PaCaLib::ColourCompose mode);
+
+static inline std::ostream & operator<<(std::ostream & os, const PaCaLib::Draw::TextParams & par)
+{
+ par.toStream(os);
+ return os;
+}
+
+static inline std::ostream & operator<<(std::ostream & os, const PaCaLib::Draw::Distortion & dist)
+{
+ dist.toStream(os);
+ return os;
+}
 
 #endif /* __SRC_PACALIB_H_INCLUDED__ */
 
