@@ -4,7 +4,6 @@ PaCaLib: my 2D rendering library based on Pango/Cairo
 This is an object-oriented library to draw graphics primitives including lines, circles, text, etc...
 
 It is based on the following external libraries:
-- pango     www.pango.org
-- cairo     www.cairographics.org
-
+- cairo     www.cairographics.org   for rendering graphics primitives
+- pango     www.pango.org           for rendering international text
 
