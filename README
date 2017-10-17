@@ -1,9 +1,14 @@
-PaCaLib: my 2D rendering library based on Pango/Cairo
+PaCaLib: my 2D rendering library interface for Glesly
 -----------------------------------------------------
 
-This is an object-oriented library to draw graphics primitives including lines, circles, text, etc...
+This is an object-oriented interface to draw graphics primitives including lines, circles, text, etc...
 
-It is based on the following external libraries:
-- cairo     www.cairographics.org   for rendering graphics primitives
-- pango     www.pango.org           for rendering international text
+It is based on the following libraries:
+- makesys   https://github.com/kgy64/makesys.git        My build system
+- baselib   https://github.com/kgy64/baselib.git        My basic library
+
+The following implementations are available:
+- Linux:
+    pacalib-pango       https://github.com/kgy64/pacalib-pango.git      Pango/Cairo based implementation
+    pacalib-android     https://github.com/kgy64/pacalib-android.git    Implementation for Android
 
